@@ -37,13 +37,27 @@ function ToDoList(){
         }
 
         function handleDeleteTask(index){
+            const updatedTask = tasks.filter((task, i) => i !== index)
+            setTasks(updatedTask);
+
+           // setTasks(tasks.filter((task, i) => i !== index));
 
         }
         function handleMoveTaskUp(index){
+            if (index === 0) return; // do nothing if task already 1st
+            const updatedTasks = [...tasks]; // copy of task
+            //updatedTasks[index, index-1] = updatedTasks[index-1, index]
+            [updatedTasks[index], updatedTasks[index-1]] = [updatedTasks[index-1], updatedTasks[index]];
+            setTasks(updatedTasks);
 
         }
 
         function handleMoveTaskDown(index){
+            if (index === tasks.length-1) return; // do nothing if task already 1st
+            const updatedTasks = [...tasks]; // copy of task
+            //updatedTasks[index, index-1] = updatedTasks[index-1, index]
+            [updatedTasks[index], updatedTasks[index+1]] = [updatedTasks[index+1], updatedTasks[index]];
+            setTasks(updatedTasks);
 
         }
 
