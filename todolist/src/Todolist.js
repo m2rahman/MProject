@@ -7,10 +7,32 @@ function ToDoList(){
 
 
         function handleNewInput(event){
+            setNewTask(event.target.value);
 
         }
 
         function handleAddTask(){
+           
+            // setNewTask([...tasks, newTask]);
+            // setNewTask("");
+           
+            // setNewTask(t => [...t, newTask]);
+            // setNewTask("");
+
+            if (newTask.trim() !== "") {
+                setTasks(t => [...t, newTask]);
+                setNewTask("");
+            }else {
+               alert("Please enter a valid task");
+            }
+
+            // if (newTask.trim() !== "") {
+            //     setTasks([...tasks, newTask]);
+            //     setNewTask("");
+            // } else {
+            //     alert("Please enter a valid task");
+            // }         
+            
 
         }
 
