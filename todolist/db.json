@@ -1,0 +1,24 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "task": "Eat breakfast"
+    },
+    {
+      "id": "2",
+      "task": "Go to work"
+    },
+    {
+      "id": "3",
+      "task": "Take shower"
+    },
+    {
+      "id": "4",
+      "task": "Power nap"
+    },
+    {
+      "id": "95d3",
+      "task": "Say Opole is not a city"
+    }
+  ]
+}

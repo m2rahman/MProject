@@ -1,30 +1,55 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 function ToDoList(){
 
-        const [tasks, setTasks] = useState(["Eat breakfast", "Kiss Salama", "Take a shower"]);
+        const [tasks, setTasks] = useState([]);
         const [newTask, setNewTask] = useState("");
 
+        // Fetching tasks from the server:
 
+        useEffect (() => {
+            fetch('http://localhost:5000/tasks')
+                .then(response=> response.json())
+                .then(data => setTasks(data));
+        }, []);
+
+        // Handling input change
         function handleNewInput(event){
             setNewTask(event.target.value);
 
         }
 
+            //Adding new task
         function handleAddTask(){
-           
+           if (newTask.trim() !== ""){
+                const task = { task: newTask.trim()};
+
+                // Send the new task to the server
+                fetch('http://localhost:5000/tasks', {
+                    method: 'POST',
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify(task)
+                })
+                .then(response =>response.json())
+                .then(data=> {
+                    setTasks([...tasks, data]);
+                    setNewTask("");
+                });
+           } else {
+            alert ("Please enter a valid task");
+           }
             // setNewTask([...tasks, newTask]);
             // setNewTask("");
            
             // setNewTask(t => [...t, newTask]);
             // setNewTask("");
 
-            if (newTask.trim() !== "") {
-                setTasks(t => [...t, newTask]);
-                setNewTask("");
-            }else {
-               alert("Please enter a valid task");
-            }
+            // if (newTask.trim() !== "") {
+            //     setTasks(t => [...t, newTask]);
+            //     setNewTask("");
+            // }else {
+            //    alert("Please enter a valid task");
+            // }
 
             // if (newTask.trim() !== "") {
             //     setTasks([...tasks, newTask]);
@@ -34,15 +59,27 @@ function ToDoList(){
             // }         
             
 
+
         }
 
-        function handleDeleteTask(index){
-            const updatedTask = tasks.filter((task, i) => i !== index)
-            setTasks(updatedTask);
+        // Deleting a task
 
+        function handleDeleteTask(index){
+            const taskToDelete = tasks[index];
+
+            fetch (`http://localhost:5000/tasks/${taskToDelete.id}`,{
+                method: 'DELETE'
+            }).then(() => {
+                const updatedTask = tasks.filter((task, i) => i !== index)
+            setTasks(updatedTask);
+            });
+
+            // const updatedTask = tasks.filter((task, i) => i !== index)
+            // setTasks(updatedTask);
            // setTasks(tasks.filter((task, i) => i !== index));
 
         }
+
         function handleMoveTaskUp(index){
             if (index === 0) return; // do nothing if task already 1st
             const updatedTasks = [...tasks]; // copy of task
@@ -68,6 +105,7 @@ function ToDoList(){
                 <input
                     type="text"
                     placeholder="Enter a new Task..."
+                    value={newTask}
                     onChange={handleNewInput}/>
 
                     <button
@@ -80,7 +118,7 @@ function ToDoList(){
             <ol>
                 {tasks.map((task, index) =>
                     <li key={index}>
-                        <span className="text" >{task}</span>
+                        <span className="text" >{task.task}</span>
                         <button
                             className="delete-button"
                             onClick={() => handleDeleteTask(index)}>
